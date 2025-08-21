@@ -4,50 +4,50 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL") // Utilisé pour les migrations
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Universite {
-  id        Int         @id @default(autoincrement())
-  nom       String
-  facultes  Faculte[]
-  utilisateurs Utilisateur[] // tous les utilisateurs liés à l'université
+  id           Int           @id @default(autoincrement())
+  nom          String
+  facultes     Faculte[]
+  utilisateurs Utilisateur[]
 }
 
 model Faculte {
-  id            Int         @id @default(autoincrement())
-  nom           String
-  universiteId  Int
-  universite    Universite   @relation(fields: [universiteId], references: [id])
-  filieres      Filiere[]
+  id           Int        @id @default(autoincrement())
+  nom          String
+  universiteId Int
+  universite   Universite @relation(fields: [universiteId], references: [id])
+  filieres     Filiere[]
 }
 
 model Filiere {
-  id         Int       @id @default(autoincrement())
-  nom        String
-  faculteId  Int
-  faculte    Faculte   @relation(fields: [faculteId], references: [id])
-  niveaux    Niveau[]
+  id        Int      @id @default(autoincrement())
+  nom       String
+  faculteId Int
+  faculte   Faculte  @relation(fields: [faculteId], references: [id])
+  niveaux   Niveau[]
 }
 
 model Niveau {
-  id         Int        @id @default(autoincrement())
-  nom        String
-  filiereId  Int
-  filiere    Filiere    @relation(fields: [filiereId], references: [id])
-  semestres  Semestre[]
-  modules    Module[]
-  etudiants  Utilisateur[] @relation("EtudiantNiveau")
+  id        Int           @id @default(autoincrement())
+  nom       String
+  filiereId Int
+  modules   Module[]
+  filiere   Filiere       @relation(fields: [filiereId], references: [id])
+  semestres Semestre[]
+  etudiants Utilisateur[] @relation("EtudiantNiveau")
 }
 
 model Semestre {
-  id        Int     @id @default(autoincrement())
-  nom       String
-  niveauId  Int
-  niveau    Niveau  @relation(fields: [niveauId], references: [id])
-  ues       UE[]
+  id       Int    @id @default(autoincrement())
+  nom      String
+  niveauId Int
+  niveau   Niveau @relation(fields: [niveauId], references: [id])
+  ues      UE[]
 }
 
 model UE {
@@ -55,19 +55,19 @@ model UE {
   code       String
   intitule   String
   semestreId Int
-  semestre   Semestre @relation(fields: [semestreId], references: [id])
   modules    Module[]
+  semestre   Semestre @relation(fields: [semestreId], references: [id])
 }
 
 model Module {
-  id         Int       @id @default(autoincrement())
-  nom        String
-  niveauId   Int
-  niveau     Niveau    @relation(fields: [niveauId], references: [id])
-  credit     Int
-  ueId       Int
-  ue         UE        @relation(fields: [ueId], references: [id])
-  notes      Note[]
+  id          Int           @id @default(autoincrement())
+  nom         String
+  niveauId    Int
+  credit      Int
+  ueId        Int
+  niveau      Niveau        @relation(fields: [niveauId], references: [id])
+  ue          UE            @relation(fields: [ueId], references: [id])
+  notes       Note[]
   professeurs Utilisateur[] @relation("ProfesseurModule")
 }
 
@@ -83,7 +83,7 @@ model Note {
 }
 
 model SemestreNote {
-  id         Int    @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   etudiantId String
   semestreId Int
   note       Float
@@ -101,18 +101,13 @@ model Utilisateur {
   motDePasse   String
   role         Role
   universiteId Int?
-  universite   Universite? @relation(fields: [universiteId], references: [id])
-
-  // Relation si c'est un étudiant
   niveauId     Int?
-  niveau       Niveau?     @relation("EtudiantNiveau", fields: [niveauId], references: [id])
-  notes        Note[]      @relation("EtudiantNotes")
-
-  // Relation si c'est un professeur
-  modules      Module[]    @relation("ProfesseurModule")
-
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+  notes        Note[]      @relation("EtudiantNotes")
+  niveau       Niveau?     @relation("EtudiantNiveau", fields: [niveauId], references: [id])
+  universite   Universite? @relation(fields: [universiteId], references: [id])
+  modules      Module[]    @relation("ProfesseurModule")
 }
 
 enum Role {
