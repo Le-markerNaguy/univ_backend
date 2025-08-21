@@ -166,6 +166,7 @@ export const supprimerProfesseur = async (req: Request, res: Response) => {
 /**
  * Mettre à jour profil professeur
  */
+
 export const mettreAJourProfilProfesseur = async (req: Request, res: Response) => {
   const { id } = req.params
   const { nom, email, modulesIds } = req.body
@@ -186,9 +187,10 @@ export const mettreAJourProfilProfesseur = async (req: Request, res: Response) =
         nom,
         email,
         modules: {
-          set: modulesIds.map((moduleId: string) => ({ id: moduleId }))
+          set: modulesIds.map((moduleId: number) => ({ id: moduleId }))
         }
-      }
+      },
+      include: { modules: true } // ⚡ indispensable
     })
 
     return res.status(200).json({
@@ -197,7 +199,10 @@ export const mettreAJourProfilProfesseur = async (req: Request, res: Response) =
         id: updatedProfesseur.id,
         nom: updatedProfesseur.nom,
         email: updatedProfesseur.email,
-        modules: updatedProfesseur.modules.map(m => ({ id: m.id, nom: m.nom }))
+        modules: updatedProfesseur.modules.map(m => ({
+          id: m.id,
+          nom: m.nom
+        }))
       }
     })
   } catch (error) {
@@ -205,10 +210,6 @@ export const mettreAJourProfilProfesseur = async (req: Request, res: Response) =
     return res.status(500).json({ error: 'Erreur serveur' })
   }
 }
-
-/**
- * Voir le profil profes
- */
 
 
 /**
