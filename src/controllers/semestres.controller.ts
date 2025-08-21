@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { prisma } from '../prisma/client'
+import { prisma } from "../../lib/prisma"
 
 /**
  * Vérifie et calcule la note d’un semestre

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { prisma } from '../prisma/client'
+import { prisma } from "../../lib/prisma"
 
 // ➤ Créer un niveau
 export const creerNiveau = async (req: Request, res: Response) => {

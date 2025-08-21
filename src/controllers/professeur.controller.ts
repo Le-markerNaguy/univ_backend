@@ -1,6 +1,6 @@
 import e, { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-import { prisma } from '../prisma/client'
+import { prisma } from "../../lib/prisma"
 import { sendCodeByEmail } from '../utils/email'
 
 /**

@@ -1,6 +1,6 @@
 // controllers/superAdmin.controller.ts
 import { Request, Response } from 'express';
-import { prisma } from '../prisma/client';
+import { prisma } from "../../lib/prisma";
 import bcrypt from 'bcrypt';
 
 const JWT_SECRET = process.env.JWT_SECRET;
