@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/app.ts",
   "scripts": {
-    "prisma:generate": "prisma generate",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
+     "postinstall": "prisma generate",
     "start": "ts-node src/app.ts --exec ts-node-dev --respawn --transpile-only",
     "dev": "ts-node src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
